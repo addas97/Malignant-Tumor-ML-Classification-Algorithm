@@ -19,21 +19,19 @@ X = cancer_data.data
 feature_names = cancer_data.feature_names
 correlation_matrix = np.corrcoef(X, rowvar=False)
 plt.figure(figsize=(10, 8))
-#sns.heatmap(correlation_matrix, annot=True, fmt='.2f', cmap='coolwarm', xticklabels=cancer_data.feature_names, yticklabels=cancer_data.feature_names)
+sns.heatmap(correlation_matrix, annot=True, fmt='.2f', cmap='coolwarm', xticklabels=cancer_data.feature_names, yticklabels=cancer_data.feature_names)
 plt.title('Correlation Matrix of Breast Cancer Dataset Features')
-plt.xlabel(cancer_data.feature_names)
-plt.ylabel(cancer_data.feature_names)
-#plt.show()
+plt.show()
 
 y = cancer_data.target # y in set [0, 1] s.t. 0 = cancerous, 1 = benign
 X = preprocessing.scale(X)
 
 # -- Step 3: Plot the inital data to see if linearly seperable --
-sns.scatterplot(x = X[:, 3], y = X[:, 7], hue = y) # Here, we plot attribute 3 (Mean Area) and attribute 2 (Mean Concave Points) in the cancer_data dataset. 
+#sns.scatterplot(x = X[:, 3], y = X[:, 7], hue = y) # Here, we plot attribute 3 (Mean Area) and attribute 2 (Mean Concave Points) in the cancer_data dataset. 
                                                    # Hue represents the labels of the dataset (0 or 1).
 plt.xlabel("Mean Area")
 plt.ylabel("Mean Concave Points")
-plt.show()
+#plt.show()
 
 # -- Step 4: Define a set of alphas and find accuracy via Cross Validation --
 alphas = np.arange(1e-15, 1, 0.005)
@@ -74,7 +72,10 @@ print(f"Accuracy of model {trained_model.score(X, y)}")
 db_slope = trained_model.coef_[0,1]/-trained_model.coef_[0,0]
 x_intercepts_db = np.arange(-20, 20, 0.05)
 y_values_db = db_slope * x_intercepts_db
-sns.scatterplot(x = X[:, 0], y = X[:, 1], hue = y)
+
+scatter = sns.scatterplot(x = X[:, 0], y = X[:, 1], hue = y)
+handles, labels = scatter.get_legend_handles_labels()
+plt.legend(handles, ['Malignant', 'Benign'], title='Cancer Classification', loc='upper right')
 plt.plot(x_intercepts_db, y_values_db, '--r')
 plt.xlim(-4,4)
 plt.ylim(-6,6)
